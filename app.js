@@ -37,16 +37,10 @@ function loadData() {
 
 // Event Listeners
 function setupEventListeners() {
-    // Import file button - forward click to hidden input
-    const importButton = document.querySelector('.file-input-wrapper .btn');
-    const importInput = document.getElementById('importFile');
-    
-    if (importButton && importInput) {
-        importButton.addEventListener('click', function(e) {
-            e.preventDefault();
-            importInput.click();
-        });
-    }
+    // Import file button - simplified approach
+    document.getElementById('importBtn').addEventListener('click', function() {
+        document.getElementById('importFile').click();
+    });
     
     // Import file input
     document.getElementById('importFile').addEventListener('change', handleFileImport);
@@ -472,6 +466,8 @@ function handleFileImport(e) {
     const files = Array.from(e.target.files);
     if (!files.length) return;
     
+    console.log('Files selected:', files.length); // Debug log
+    
     let importedData = [];
     let filesProcessed = 0;
     
@@ -497,6 +493,8 @@ function handleFileImport(e) {
                     filesProcessed++;
                     return;
                 }
+                
+                console.log(`Processing ${file.name} with ${data.length} rows`); // Debug log
                 
                 // Process based on file structure
                 if (file.name.includes('feesexport')) {
@@ -599,6 +597,8 @@ function handleFileImport(e) {
             // Check if all files are processed
             if (filesProcessed === files.length) {
                 // All files processed
+                console.log(`Import complete. Total entries: ${importedData.length}`); // Debug log
+                
                 if (importedData.length > 0) {
                     // Merge with existing data or replace
                     if (visaData.length === 0 || confirm('Do you want to replace existing data? (Cancel to append)')) {
@@ -612,7 +612,7 @@ function handleFileImport(e) {
                     renderTable();
                     showTooltip(`Successfully imported ${importedData.length} entries!`, window.innerWidth / 2, window.innerHeight / 2);
                 } else {
-                    alert('No valid data found in the imported files.');
+                    alert('No valid data found in the imported files. Please check your CSV format.');
                 }
             }
         };
