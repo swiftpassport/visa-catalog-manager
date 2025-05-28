@@ -37,7 +37,18 @@ function loadData() {
 
 // Event Listeners
 function setupEventListeners() {
-    // Import file
+    // Import file button - forward click to hidden input
+    const importButton = document.querySelector('.file-input-wrapper .btn');
+    const importInput = document.getElementById('importFile');
+    
+    if (importButton && importInput) {
+        importButton.addEventListener('click', function(e) {
+            e.preventDefault();
+            importInput.click();
+        });
+    }
+    
+    // Import file input
     document.getElementById('importFile').addEventListener('change', handleFileImport);
     
     // Export dropdown
